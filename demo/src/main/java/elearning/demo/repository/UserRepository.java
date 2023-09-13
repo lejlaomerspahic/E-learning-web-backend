@@ -1,5 +1,10 @@
 package elearning.demo.repository;
 
-public class UserRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import elearning.demo.models.User;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByEmail(String email);
 
 }

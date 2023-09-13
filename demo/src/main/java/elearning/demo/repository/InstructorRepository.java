@@ -1,5 +1,8 @@
 package elearning.demo.repository;
 
-public class InstructorRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import elearning.demo.models.Instructor;
+
+public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 }

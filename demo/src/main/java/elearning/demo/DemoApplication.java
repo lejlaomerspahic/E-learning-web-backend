@@ -18,8 +18,7 @@ public class DemoApplication {
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthenticationFilter());
-        registrationBean.addUrlPatterns("/api/*"); // Define which paths should
-                                                   // go through the filter
+        registrationBean.addUrlPatterns("/api/*");
         return registrationBean;
     }
 
