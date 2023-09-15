@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> createJwtToken(@RequestBody UserLoginRequest user) throws Exception {
         try {
-            return ResponseEntity.ok().body(this._userService.createToken(user));
+            return ResponseEntity.ok().body(this._userService.login(user));
         } catch (DisabledException ex) {
             return ResponseEntity.badRequest().body("User with your email does not exist");
         } catch (BadCredentialsException ex) {

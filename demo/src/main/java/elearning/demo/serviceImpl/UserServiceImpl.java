@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,8 @@ import elearning.demo.repository.RoleRepository;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.security.JwtTokenProvider;
 import elearning.demo.service.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,8 +36,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenProvider _jwtUtil;
 
     @Override
-    public UserCreatedResponse saveUser(UserCreatedRequest appUser) throws Exception {
-
+    public UserCreatedResponse signUp(UserCreatedRequest appUser) throws Exception {
         User usr = this._userRepository.findByEmail(appUser.getEmail());
         if (usr != null) {
             throw new Exception("User with email already exists.");
@@ -56,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JwtResponse createToken(UserLoginRequest user) throws Exception {
+    public JwtResponse login(UserLoginRequest user) throws Exception {
         String username = user.getEmail();
         String password = user.getPassword();
         authenticate(username, password);
@@ -85,9 +87,29 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found!");
         }
+
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    }
+
+    @Override
+    public UserCreatedRequest updateUser(UserCreatedRequest user) {
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            String jwtToken = (String) authentication.getCredentials();
+
+            Claims claims = Jwts.parser().setSigningKey("${jwt.secret}").parseClaimsJws(jwtToken).getBody();
+
+            Long userId = (Long) claims.get("userId");
+            User userr = _userRepository.findById(userId).get();
+            userr.setEmail(user.getEmail());
+            userr.setFirstName(user.getFirstName());
+            userr.setLocation(user.getLocation());
+            userr.setPassword(user.getPassword());
+        }
+        return user;
     }
 
 }

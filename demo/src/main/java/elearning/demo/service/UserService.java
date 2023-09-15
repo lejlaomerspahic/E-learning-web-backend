@@ -9,8 +9,10 @@ import elearning.demo.dto.user.UserLoginRequest;
 @Service
 public interface UserService {
 
-    UserCreatedResponse saveUser(UserCreatedRequest appUser) throws Exception;
+    UserCreatedResponse signUp(UserCreatedRequest appUser) throws Exception;
 
-    Object createToken(UserLoginRequest user) throws Exception;
+    Object login(UserLoginRequest user) throws Exception;
+
+    UserCreatedRequest updateUser(UserCreatedRequest user);
 
 }
