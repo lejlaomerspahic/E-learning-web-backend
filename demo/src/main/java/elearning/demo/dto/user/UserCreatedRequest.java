@@ -1,5 +1,8 @@
 package elearning.demo.dto.user;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class UserCreatedRequest {
 
     private String FirstName;
@@ -37,6 +40,13 @@ public class UserCreatedRequest {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public UserCreatedRequest(String firstName, String email, String location) {
+        super();
+        FirstName = firstName;
+        Email = email;
+        Location = location;
     }
 
 }

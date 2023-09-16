@@ -2,11 +2,11 @@ package elearning.demo.service;
 
 import org.springframework.stereotype.Service;
 
-import elearning.demo.models.User;
+import elearning.demo.dto.user.UserCreatedRequest;
 
 @Service
 public interface UserService {
 
-    String addUser(User userInfo);
+    UserCreatedRequest saveUser(UserCreatedRequest appUser) throws Exception;
 
 }

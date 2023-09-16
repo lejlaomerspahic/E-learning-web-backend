@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.service.UserService;
@@ -20,10 +21,15 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public String addUser(User userInfo) {
-        userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        repository.save(userInfo);
-        return "user added to system ";
+    public UserCreatedRequest saveUser(UserCreatedRequest appUser) throws Exception {
+        User usr = repository.findByEmail(appUser.getEmail());
+        if (usr != null) {
+            throw new Exception("User with email already exists.");
+        }
+        User user = new User(appUser.getFirstName(), appUser.getEmail(), appUser.getPassword(), appUser.getLocation());
+        user.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        var returnUser = repository.save(user);
+        return new UserCreatedRequest(returnUser.getFirstName(), returnUser.getEmail(), returnUser.getLocation());
     }
 
 }
