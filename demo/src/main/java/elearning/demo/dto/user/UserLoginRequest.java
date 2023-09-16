@@ -2,23 +2,23 @@ package elearning.demo.dto.user;
 
 public class UserLoginRequest {
 
-    private String Email;
-    private String Password;
+    private String username;
+    private String password;
 
-    public String getEmail() {
-        return Email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
 }

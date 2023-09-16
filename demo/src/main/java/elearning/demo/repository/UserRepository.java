@@ -7,4 +7,6 @@ import elearning.demo.models.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
+    User findByFirstName(String firstName);
+
 }

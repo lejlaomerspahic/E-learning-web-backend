@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
-import elearning.demo.security.JwtTokenProvider;
 import elearning.demo.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +21,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository _userRepository;
     // private final RoleRepository _roleRepository;
     private final PasswordEncoder _passwordEncoder;
-    private final JwtTokenProvider _jwtUtil;
 
     // @Override
     // public UserCreatedResponse signUp(UserCreatedRequest appUser) throws

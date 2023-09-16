@@ -25,6 +25,8 @@ public class User {
     private String firstName;
     private String password;
 
+    private String role;
+
     public User(String firstName, String email, String location, String password) {
         super();
         this.email = email;

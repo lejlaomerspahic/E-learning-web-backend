@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
-import elearning.demo.security.JwtAuthenticationFilter;
+import elearning.demo.security.JwtAuthFilter;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -15,9 +15,9 @@ public class DemoApplication {
     }
 
     @Bean
-    public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilter() {
-        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new JwtAuthenticationFilter());
+    public FilterRegistrationBean<JwtAuthFilter> jwtFilter() {
+        FilterRegistrationBean<JwtAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new JwtAuthFilter());
         registrationBean.addUrlPatterns("/api/*");
         return registrationBean;
     }
