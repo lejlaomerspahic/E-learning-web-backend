@@ -23,4 +23,10 @@ public class UserInfoUserDetailsService implements UserDetailsService {
         return userInfo.map(UserInfoUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
 
     }
+
+    public UserDetails loadUserById(Long userId) throws UsernameNotFoundException {
+        Optional<User> userInfo = repository.findById(userId);
+        return userInfo.map(UserInfoUserDetails::new).orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+    }
+
 }

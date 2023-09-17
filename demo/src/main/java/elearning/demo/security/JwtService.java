@@ -4,11 +4,15 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import elearning.demo.models.User;
+import elearning.demo.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +23,9 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+
+    @Autowired
+    private UserRepository userRepository;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -53,8 +60,9 @@ public class JwtService {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final Long id = getUserIdFromToken(token);
+        Optional<User> user = userRepository.findById(id);
+        return (user.get().getUsername().equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public String generateToken(String userName, Long userId) {

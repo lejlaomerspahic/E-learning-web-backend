@@ -49,7 +49,6 @@ public class UserController {
         Long userId = jwtService.getUserIdFromToken(token);
 
         UserUpdateRequest updatedUser = userService.updateUser(userId, updatedUserData);
-        jwtService.generateToken(updatedUserData.getUsername(), userId);
         return updatedUser;
     }
 }
