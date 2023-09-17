@@ -10,15 +10,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
 import elearning.demo.security.JwtService;
+import elearning.demo.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 @CrossOrigin("*")
+@Api(value = "User Authentication", tags = "User Authentication")
 public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private JwtService jwtService;
@@ -33,8 +40,12 @@ public class UserController {
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getUsername());
         } else {
-            throw new UsernameNotFoundException("invalid user request !");
+            throw new UsernameNotFoundException("Invalid user request!");
         }
+    }
 
+    @PostMapping("/generate")
+    public UserCreatedRequest generate(@RequestBody UserCreatedRequest authRequest) throws Exception {
+        return userService.saveUser(authRequest);
     }
 }

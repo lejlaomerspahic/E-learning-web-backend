@@ -22,17 +22,24 @@ public class User {
 
     private String email;
     private String location;
-    private String firstName;
+    private String username;
     private String password;
 
     private String role;
 
-    public User(String firstName, String email, String location, String password) {
+    public User(String username, String email, String location, String password) {
         super();
         this.email = email;
         this.location = location;
-        this.firstName = firstName;
+        this.username = username;
         this.password = password;
+    }
+
+    public User(String username, String email, String location) {
+        super();
+        this.email = email;
+        this.location = location;
+        this.username = username;
     }
 
     public Long getId() {
@@ -59,12 +66,12 @@ public class User {
         this.location = location;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

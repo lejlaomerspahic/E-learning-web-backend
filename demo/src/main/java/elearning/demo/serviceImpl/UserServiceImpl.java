@@ -26,10 +26,10 @@ public class UserServiceImpl implements UserService {
         if (usr != null) {
             throw new Exception("User with email already exists.");
         }
-        User user = new User(appUser.getFirstName(), appUser.getEmail(), appUser.getPassword(), appUser.getLocation());
+        User user = new User(appUser.getUsername(), appUser.getEmail(), appUser.getLocation());
         user.setPassword(passwordEncoder.encode(appUser.getPassword()));
         var returnUser = repository.save(user);
-        return new UserCreatedRequest(returnUser.getFirstName(), returnUser.getEmail(), returnUser.getLocation());
+        return new UserCreatedRequest(returnUser.getUsername(), returnUser.getEmail(), returnUser.getLocation());
     }
 
 }

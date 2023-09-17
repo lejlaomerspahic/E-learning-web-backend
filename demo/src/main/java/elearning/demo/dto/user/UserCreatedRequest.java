@@ -1,52 +1,60 @@
 package elearning.demo.dto.user;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public class UserCreatedRequest {
 
-    private String FirstName;
-    private String Email;
-    private String Location;
-    private String Password;
+    private String username;
+    private String email;
+    private String location;
+    private String password;
 
-    public String getFirstName() {
-        return FirstName;
+    public UserCreatedRequest(String username, String email, String location, String password) {
+        super();
+        this.username = username;
+        this.email = email;
+        this.location = location;
+        this.password = password;
     }
 
-    public void setFirstName(String firstName) {
-        FirstName = firstName;
+    public UserCreatedRequest() {
+    }
+
+    public UserCreatedRequest(String username, String email, String location) {
+        super();
+        this.username = username;
+        this.email = email;
+        this.location = location;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setFirstName(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
-    }
-
-    public UserCreatedRequest(String firstName, String email, String location) {
-        super();
-        FirstName = firstName;
-        Email = email;
-        Location = location;
+        this.password = password;
     }
 
 }
