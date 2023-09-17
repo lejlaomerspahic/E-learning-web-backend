@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User(appUser.getUsername(), appUser.getEmail(), appUser.getLocation());
         user.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        user.setRole("USER_ROLE");
         var returnUser = repository.save(user);
         return new UserCreatedRequest(returnUser.getUsername(), returnUser.getEmail(), returnUser.getLocation());
     }
