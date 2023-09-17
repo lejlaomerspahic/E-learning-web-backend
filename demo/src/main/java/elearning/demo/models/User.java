@@ -70,7 +70,7 @@ public class User {
         return username;
     }
 
-    public void setFirstName(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 

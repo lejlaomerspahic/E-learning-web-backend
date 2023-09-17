@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
+import elearning.demo.dto.user.UserUpdateRequest;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.security.JwtService;
 import elearning.demo.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,6 +57,23 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
         }
+    }
+
+    @Override
+    public UserUpdateRequest updateUser(Long userId, UserUpdateRequest updatedUserData) {
+        User existingUser = repository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
+
+        existingUser.setUsername(updatedUserData.getUsername());
+        existingUser.setEmail(updatedUserData.getEmail());
+        existingUser.setPassword(updatedUserData.getPassword());
+        existingUser.setLocation(updatedUserData.getLocation());
+
+        User updatedUser = repository.save(existingUser);
+
+        return new UserUpdateRequest(updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getPassword(),
+                updatedUser.getLocation());
+
     }
 
 }

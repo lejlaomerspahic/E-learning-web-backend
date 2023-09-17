@@ -25,7 +25,14 @@ public class JwtService {
     }
 
     public Long getUserIdFromToken(String token) {
-        return extractClaim(token, claims -> claims.get("userId", Long.class));
+        Long userId = extractClaim(token, claims -> {
+            if (claims.containsKey("userId")) {
+                return claims.get("userId", Long.class);
+            } else {
+                throw new IllegalArgumentException("UserId nije prisutan u claims objektu.");
+            }
+        });
+        return userId;
     }
 
     public Date extractExpiration(String token) {
