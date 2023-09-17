@@ -43,11 +43,8 @@ public class UserController {
     @PutMapping("/update")
     public UserUpdateRequest updateUser(@RequestBody UserUpdateRequest updatedUserData,
             @RequestHeader("Authorization") String authorizationHeader) {
-
         String token = authorizationHeader.substring(7);
-
         Long userId = jwtService.getUserIdFromToken(token);
-
         UserUpdateRequest updatedUser = userService.updateUser(userId, updatedUserData);
         return updatedUser;
     }
