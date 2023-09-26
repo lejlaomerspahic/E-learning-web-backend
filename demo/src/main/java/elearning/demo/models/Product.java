@@ -20,6 +20,11 @@ import lombok.NoArgsConstructor;
 
 @Table(name = "product")
 public class Product {
+
+    public Product(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

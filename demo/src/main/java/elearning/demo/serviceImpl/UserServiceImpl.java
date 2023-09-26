@@ -1,5 +1,7 @@
 package elearning.demo.serviceImpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,8 +11,12 @@ import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
+import elearning.demo.dto.user.UserUpadateProducts;
 import elearning.demo.dto.user.UserUpdateRequest;
 import elearning.demo.mapper.UserMapper;
+import elearning.demo.models.Items;
+import elearning.demo.models.Product;
+import elearning.demo.models.Products;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.security.JwtService;
@@ -84,6 +90,30 @@ public class UserServiceImpl implements UserService {
     public UserCreatedRequest getUser(Long userId) throws Exception {
         UserCreatedRequest user = userMapper.entityToDto(repository.getById(userId));
         return user;
+
+    }
+
+    @Override
+    public User updateUserProduct(Long userId, UserUpadateProducts updatedUserData) throws Exception {
+        boolean areAllNamesEqual = false;
+        String name = "";
+        for (int i = 1; i < updatedUserData.getPlaces().size(); i++) {
+            if (updatedUserData.getPlaces().get(i) != updatedUserData.getPlaces().get(0)) {
+                areAllNamesEqual = true;
+                name = updatedUserData.getPlaces().get(i);
+            }
+        }
+        List<Items> items=new ArrayList<Items>;
+        if (areAllNamesEqual) {
+            for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
+                Product product = new Product(updatedUserData.getProductIds().get(i));
+                items.push(product, updatedUserData.getCounts().get(i));
+            }
+        }
+
+        Products products = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(), name);
+
+        return null;
 
     }
 

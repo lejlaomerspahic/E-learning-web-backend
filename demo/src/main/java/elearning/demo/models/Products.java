@@ -8,6 +8,10 @@ import jakarta.persistence.OneToMany;
 
 public class Products {
 
+    public Products(List<Items> items2, String date, String status, Long price, String place) {
+
+    }
+
     @OneToMany(mappedBy = "products")
     private List<Items> items;
 
