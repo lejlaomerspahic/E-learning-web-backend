@@ -2,6 +2,7 @@ package elearning.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,10 +43,19 @@ public class UserController {
 
     @PutMapping("/update")
     public UserUpdateRequest updateUser(@RequestBody UserUpdateRequest updatedUserData,
-            @RequestHeader("Authorization") String authorizationHeader) {
+            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
         String token = authorizationHeader.substring(7);
         Long userId = jwtService.getUserIdFromToken(token);
         UserUpdateRequest updatedUser = userService.updateUser(userId, updatedUserData);
         return updatedUser;
+    }
+
+    @GetMapping("/get")
+    public UserCreatedRequest getUser(@RequestBody UserUpdateRequest updatedUserData,
+            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+        String token = authorizationHeader.substring(7);
+        Long userId = jwtService.getUserIdFromToken(token);
+        UserCreatedRequest user = userService.getUser(userId);
+        return user;
     }
 }

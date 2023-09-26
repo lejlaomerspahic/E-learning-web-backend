@@ -13,6 +13,8 @@ public interface UserService {
 
     String login(UserLoginRequest authRequest) throws Exception;
 
-    UserUpdateRequest updateUser(Long userId, UserUpdateRequest updatedUserData);
+    UserUpdateRequest updateUser(Long userId, UserUpdateRequest updatedUserData) throws Exception;
+
+    UserCreatedRequest getUser(Long userId) throws Exception;
 
 }

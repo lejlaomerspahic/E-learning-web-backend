@@ -1,9 +1,12 @@
 package elearning.demo.models;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -81,5 +84,11 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<Products> products;
+
+    @OneToMany(mappedBy = "user")
+    private List<Scores> scores;
 
 }

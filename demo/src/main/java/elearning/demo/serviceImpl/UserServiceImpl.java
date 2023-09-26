@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
 import elearning.demo.dto.user.UserUpdateRequest;
+import elearning.demo.mapper.UserMapper;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.security.JwtService;
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public UserCreatedRequest saveUser(UserCreatedRequest appUser) throws Exception {
@@ -60,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserUpdateRequest updateUser(Long userId, UserUpdateRequest updatedUserData) {
+    public UserUpdateRequest updateUser(Long userId, UserUpdateRequest updatedUserData) throws Exception {
         User existingUser = repository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
 
@@ -73,6 +77,13 @@ public class UserServiceImpl implements UserService {
 
         return new UserUpdateRequest(updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getPassword(),
                 updatedUser.getLocation());
+
+    }
+
+    @Override
+    public UserCreatedRequest getUser(Long userId) throws Exception {
+        UserCreatedRequest user = userMapper.entityToDto(repository.getById(userId));
+        return user;
 
     }
 
