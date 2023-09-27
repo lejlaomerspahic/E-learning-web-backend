@@ -1,5 +1,6 @@
 package elearning.demo.models;
 
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class Products {
     @OneToMany(mappedBy = "products")
     private List<Items> items;
 
-    private String date;
+    private Date date;
     private String status;
     private String price;
     private String place;
@@ -46,11 +47,11 @@ public class Products {
         this.items = items;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

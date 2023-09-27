@@ -1,9 +1,12 @@
 package elearning.demo.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -150,9 +153,9 @@ public class UserServiceImpl implements UserService {
 
         String itemStatus = null;
 
-        for (Products product : user.getProducts()) {
-            if (product.getId().equals(itemId)) {
-                itemStatus = product.getStatus();
+        for (Products products : user.getProducts()) {
+            if (products.getId().equals(itemId)) {
+                itemStatus = products.getStatus();
                 break;
             }
         }
@@ -162,6 +165,42 @@ public class UserServiceImpl implements UserService {
         }
 
         return itemStatus;
+    }
+
+    @Scheduled(cron = "*/10 * * * * *")
+        public void updateStatus() {
+            List<User> users = repository.findAll();
+
+            for (User user : users) {
+                for (Products products : user.getProducts()) {
+                    Date currentDate = new Date();
+                    Date purchaseDate = products.getDate();
+                    long twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
+                    Date nextStatusUpdateDate = new Date(purchaseDate.getTime() + twoDaysInMillis);
+
+                    String[] statusOptions = {
+                        "Narudžba primljena",
+                        "Narudžba poslata",
+                        "Narudžba u tranzitu",
+                        "Narudžba stigla na odredište",
+                        "Narudžba u procesu dostave",
+                        "Narudžba isporučena"
+                    };
+
+                    if (currentDate.after(nextStatusUpdateDate)) {
+                        int currentStatusIndex = Arrays.asList(statusOptions).indexOf(products.getStatus());
+
+
+                        if (currentStatusIndex < statusOptions.length - 1) {
+                            String newStatus = statusOptions[currentStatusIndex + 1];
+                            products.setStatus(newStatus);
+                        }
+                    }
+                }
+
+                repository.save(user);
+            }
+        }
     }
 
 }
