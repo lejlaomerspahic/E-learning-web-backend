@@ -105,9 +105,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         Items item = new Items();
-
         List<Items> items = new ArrayList();
         List<Products> products = new ArrayList();
+        User existingUser = repository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
+
         if (areAllNamesEqual) {
             for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
                 Product product = new Product(updatedUserData.getProductIds().get(i));
@@ -119,9 +121,6 @@ public class UserServiceImpl implements UserService {
             Products product = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
                     name);
 
-            User existingUser = repository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
-
             products.add(product);
             existingUser.setProducts(products);
         } else {
@@ -129,22 +128,40 @@ public class UserServiceImpl implements UserService {
                 Product product = new Product(updatedUserData.getProductIds().get(i));
                 item.setProductId(product);
                 item.setCount(updatedUserData.getCounts().get(i));
+                items.add(item);
+
+                Products productt = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
+                        name);
+
+                products.add(productt);
+                existingUser.setProducts(products);
             }
 
-            List<Items> itemss = new ArrayList();
-            items.add(item);
-            Products product = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
-                    name);
-
-            User existingUser = repository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
-
-            products.add(product);
-            existingUser.setProducts(products);
         }
 
-        return null;
+        return existingUser;
 
+    }
+
+    @Override
+    public String getStatus(Long userId, String itemId) {
+        User user = repository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
+
+        String itemStatus = null;
+
+        for (Products product : user.getProducts()) {
+            if (product.getId().equals(itemId)) {
+                itemStatus = product.getStatus();
+                break;
+            }
+        }
+
+        if (itemStatus == null) {
+            return "Stavka nije pronađena";
+        }
+
+        return itemStatus;
     }
 
 }

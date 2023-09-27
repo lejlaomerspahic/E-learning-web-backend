@@ -21,4 +21,5 @@ public interface UserService {
 
     User updateUserProduct(Long userId, UserUpadateProducts updatedUserData) throws Exception;
 
+    String getStatus(Long userId, String itemId);
 }

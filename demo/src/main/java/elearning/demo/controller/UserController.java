@@ -3,6 +3,7 @@ package elearning.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,5 +69,14 @@ public class UserController {
         Long userId = jwtService.getUserIdFromToken(token);
         User user = userService.updateUserProduct(userId, updatedUserData);
         return user;
+    }
+
+    @GetMapping("/status/{itemId}")
+    public String getStatus(@PathVariable String itemId, @RequestHeader("Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.substring(7);
+        Long userId = jwtService.getUserIdFromToken(token);
+        String status = userService.getStatus(userId, itemId);
+        return token;
     }
 }
