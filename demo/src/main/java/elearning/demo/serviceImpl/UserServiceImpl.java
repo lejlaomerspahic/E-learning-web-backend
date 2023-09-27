@@ -168,39 +168,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Scheduled(cron = "*/10 * * * * *")
-        public void updateStatus() {
-            List<User> users = repository.findAll();
+    public void updateStatus() {
+        List<User> users = repository.findAll();
 
-            for (User user : users) {
-                for (Products products : user.getProducts()) {
-                    Date currentDate = new Date();
-                    Date purchaseDate = products.getDate();
-                    long twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
-                    Date nextStatusUpdateDate = new Date(purchaseDate.getTime() + twoDaysInMillis);
+        for (User user : users) {
+            for (Products products : user.getProducts()) {
+                Date currentDate = new Date();
+                Date purchaseDate = products.getDate();
+                long twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
+                Date nextStatusUpdateDate = new Date(purchaseDate.getTime() + twoDaysInMillis);
 
-                    String[] statusOptions = {
-                        "Narudžba primljena",
-                        "Narudžba poslata",
-                        "Narudžba u tranzitu",
-                        "Narudžba stigla na odredište",
-                        "Narudžba u procesu dostave",
-                        "Narudžba isporučena"
-                    };
+                String[] statusOptions = { "Narudžba primljena", "Narudžba poslata", "Narudžba u tranzitu", "Narudžba stigla na odredište",
+                        "Narudžba u procesu dostave", "Narudžba isporučena" };
 
-                    if (currentDate.after(nextStatusUpdateDate)) {
-                        int currentStatusIndex = Arrays.asList(statusOptions).indexOf(products.getStatus());
+                if (currentDate.after(nextStatusUpdateDate)) {
+                    int currentStatusIndex = Arrays.asList(statusOptions).indexOf(products.getStatus());
 
-
-                        if (currentStatusIndex < statusOptions.length - 1) {
-                            String newStatus = statusOptions[currentStatusIndex + 1];
-                            products.setStatus(newStatus);
-                        }
+                    if (currentStatusIndex < statusOptions.length - 1) {
+                        String newStatus = statusOptions[currentStatusIndex + 1];
+                        products.setStatus(newStatus);
                     }
                 }
-
-                repository.save(user);
             }
+
+            repository.save(user);
         }
     }
-
 }

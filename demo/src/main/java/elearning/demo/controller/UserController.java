@@ -77,6 +77,6 @@ public class UserController {
         String token = authorizationHeader.substring(7);
         Long userId = jwtService.getUserIdFromToken(token);
         String status = userService.getStatus(userId, itemId);
-        return token;
+        return status;
     }
 }
