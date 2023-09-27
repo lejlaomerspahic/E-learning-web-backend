@@ -5,14 +5,32 @@ import jakarta.persistence.ManyToOne;
 
 public class Items {
 
-    public Items(Product productId, Long count) {
-        this.productId = productId;
-        this.count = count;
-    }
-
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product productId;
 
     private Long count;
+
+    public Items() {
+        super();
+        this.productId = productId;
+        this.count = count;
+    }
+
+    public Product getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Product productId) {
+        this.productId = productId;
+    }
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
 }

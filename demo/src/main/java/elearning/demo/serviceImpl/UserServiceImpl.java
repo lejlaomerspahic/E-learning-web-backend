@@ -1,5 +1,6 @@
 package elearning.demo.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,15 +104,44 @@ public class UserServiceImpl implements UserService {
                 name = updatedUserData.getPlaces().get(i);
             }
         }
-        List<Items> items=new ArrayList<Items>;
+        Items item = new Items();
+
+        List<Items> items = new ArrayList();
+        List<Products> products = new ArrayList();
         if (areAllNamesEqual) {
             for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
                 Product product = new Product(updatedUserData.getProductIds().get(i));
-                items.push(product, updatedUserData.getCounts().get(i));
+                item.setProductId(product);
+                item.setCount(updatedUserData.getCounts().get(i));
             }
-        }
 
-        Products products = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(), name);
+            items.add(item);
+            Products product = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
+                    name);
+
+            User existingUser = repository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
+
+            products.add(product);
+            existingUser.setProducts(products);
+        } else {
+            for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
+                Product product = new Product(updatedUserData.getProductIds().get(i));
+                item.setProductId(product);
+                item.setCount(updatedUserData.getCounts().get(i));
+            }
+
+            List<Items> itemss = new ArrayList();
+            items.add(item);
+            Products product = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
+                    name);
+
+            User existingUser = repository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
+
+            products.add(product);
+            existingUser.setProducts(products);
+        }
 
         return null;
 
