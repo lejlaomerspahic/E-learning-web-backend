@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import elearning.demo.dto.instructor.InstructorCreatedRequest;
 import elearning.demo.mapper.InstructorMapper;
+import elearning.demo.models.Instructor;
 import elearning.demo.repository.InstructorRepository;
 import elearning.demo.service.InstructorService;
 
@@ -16,8 +17,13 @@ public class InstructorServiceImpl implements InstructorService {
     InstructorMapper instructorMapper;
 
     @Override
-    public String create(InstructorCreatedRequest courseCreatedRequest) {
-        instructorRepository.save(instructorMapper.dtoToEntity(courseCreatedRequest));
-        return "Course created successfully";
+    public String create(InstructorCreatedRequest instructorCreatedRequest) {
+        instructorRepository.save(instructorMapper.dtoToEntity(instructorCreatedRequest));
+        return "Instructor created successfully";
+    }
+
+    @Override
+    public Instructor getInstructor(Long id) {
+        return instructorRepository.findById(id).get();
     }
 }

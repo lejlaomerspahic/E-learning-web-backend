@@ -1,7 +1,6 @@
 package elearning.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
@@ -15,7 +14,7 @@ public interface CourseService {
 
     List<Course> search(String key);
 
-    Optional<Course> getCourse(Long id);
+    Course getCourse(Long id);
 
     Double rating(Long courseId, RatingRequest ratingRequest, Long userId);
 

@@ -1,7 +1,6 @@
 package elearning.demo.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +43,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Course> getCourse(@PathVariable Long id) {
+    public Course getCourse(@PathVariable Long id) {
         return courseService.getCourse(id);
     }
 
