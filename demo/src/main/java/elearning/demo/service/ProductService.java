@@ -9,10 +9,13 @@ import elearning.demo.models.Product;
 
 @Service
 public interface ProductService {
-    Product getProduct(int id);
 
     List<Product> getProducts();
 
-    ProductCreatedReqRes createProduct(ProductCreatedReqRes productCreatedReqRes);
+    String createProduct(ProductCreatedReqRes productCreatedReqRes);
+
+    Product getProduct(Long id);
+
+    List<Product> search(String key);
 
 }

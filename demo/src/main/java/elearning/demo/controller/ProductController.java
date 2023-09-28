@@ -3,6 +3,7 @@ package elearning.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,21 +29,15 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('ADMIN_ROLE')")
-    public List<Product> getAllTheProducts() {
-        return service.getProducts();
-    }
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER_ROLE')")
-    public Product getProductById(@PathVariable int id) {
-        return service.getProduct(id);
-    }
-
     @PostMapping("/postProduct")
     @PreAuthorize("hasAuthority('USER_ROLE')")
-    public ProductCreatedReqRes postProduct(@RequestBody ProductCreatedReqRes productCreatedReqRes) {
+    public String postProduct(@RequestBody ProductCreatedReqRes productCreatedReqRes) {
         return service.createProduct(productCreatedReqRes);
+    }
+
+    @GetMapping("/search/{key}")
+    public ResponseEntity<Object> searchProduct(@PathVariable String key) {
+        List<Product> products = service.search(key);
+        return ResponseEntity.ok(products);
     }
 }
