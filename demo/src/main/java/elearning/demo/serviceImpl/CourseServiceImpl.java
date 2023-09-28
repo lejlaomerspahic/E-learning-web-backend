@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import elearning.demo.dto.course.CourseCreatedRequest;
 import elearning.demo.dto.course.RatingRequest;
@@ -84,6 +86,28 @@ public class CourseServiceImpl implements CourseService {
         int totalRatings = ratings.size();
 
         return (double) totalRatingSum / totalRatings;
+    }
+
+    @Override
+    public ResponseEntity<Object> check(Long courseId, Long userId) {
+        try {
+            Optional<Course> course = courseRepository.findById(courseId);
+            if (course == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            }
+
+            Long userRating = courseRepository.findUserRatingForCourse(userId, courseId);
+
+            List<Rating> allRatings = course.get().getRatings();
+
+            double averageRating = this.calculateAverageRating(course.get());
+
+            return ResponseEntity
+                    .ok(new elearning.demo.dto.course.CourseDetailsResponse(course.get(), userRating, allRatings.size(), averageRating));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get course details");
+        }
     }
 
 }
