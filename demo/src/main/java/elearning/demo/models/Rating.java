@@ -18,6 +18,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "rating")
 public class Rating {
+
+    public Rating(User userId, Long rating) {
+        this.user = userId;
+        this.rating = rating;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,6 +41,6 @@ public class Rating {
     private User user;
 
     @Column(nullable = false)
-    private int rating;
+    private Long rating;
 
 }
