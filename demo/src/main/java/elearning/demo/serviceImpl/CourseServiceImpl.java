@@ -93,7 +93,7 @@ public class CourseServiceImpl implements CourseService {
         try {
             Optional<Course> course = courseRepository.findById(courseId);
             if (course == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
             }
 
             Long userRating = courseRepository.findUserRatingForCourse(userId, courseId);
@@ -106,7 +106,7 @@ public class CourseServiceImpl implements CourseService {
                     .ok(new elearning.demo.dto.course.CourseDetailsResponse(course.get(), userRating, allRatings.size(), averageRating));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get course details");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get product details");
         }
     }
 
