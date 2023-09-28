@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             Optional<Product> product = productRepository.findById(productId);
             if (product == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
             }
 
             Long userRating = productRepository.findUserRatingForProduct(userId, productId);
@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
                     .ok(new elearning.demo.dto.product.ProductDetailsResponse(product.get(), userRating, allRatings.size(), averageRating));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get course details");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get product details");
         }
     }
 }
