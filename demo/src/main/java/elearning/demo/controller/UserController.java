@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
+import elearning.demo.dto.user.UserUpadateProducts;
 import elearning.demo.dto.user.UserUpdateRequest;
+import elearning.demo.models.User;
 import elearning.demo.security.JwtService;
 import elearning.demo.service.UserService;
 import io.swagger.annotations.Api;
@@ -60,16 +62,14 @@ public class UserController {
         return user;
     }
 
-    // @PutMapping("/update/products")
-    // public User updateUserProducts(@RequestBody UserUpadateProducts
-    // updatedUserData,
-    // @RequestHeader("Authorization") String authorizationHeader) throws
-    // Exception {
-    // String token = authorizationHeader.substring(7);
-    // Long userId = jwtService.getUserIdFromToken(token);
-    // User user = userService.updateUserProduct(userId, updatedUserData);
-    // return user;
-    // }
+    @PutMapping("/update/products")
+    public User updateUserProducts(@RequestBody UserUpadateProducts updatedUserData,
+            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+        String token = authorizationHeader.substring(7);
+        Long userId = jwtService.getUserIdFromToken(token);
+        User user = userService.updateUserProduct(userId, updatedUserData);
+        return user;
+    }
 
     @GetMapping("/status/{itemId}")
     public String getStatus(@PathVariable String itemId, @RequestHeader("Authorization") String authorizationHeader) {
@@ -80,9 +80,9 @@ public class UserController {
         return status;
     }
 
-    // @GetMapping("/statusUpdate")
-    // public void startScheduledTask() {
-    // userService.updateStatus();
-    // }
+    @GetMapping("/statusUpdate")
+    public void startScheduledTask() {
+        userService.updateStatus();
+    }
 
 }

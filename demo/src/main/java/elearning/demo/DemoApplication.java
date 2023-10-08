@@ -5,11 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import elearning.demo.security.JwtAuthFilter;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "elearning.demo.mapper")
+@EnableScheduling
 public class DemoApplication {
 
     public static void main(String[] args) {
