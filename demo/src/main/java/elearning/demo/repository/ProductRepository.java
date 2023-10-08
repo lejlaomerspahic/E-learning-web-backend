@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "LOWER(p.imageUrl) LIKE LOWER(CONCAT('%', :key, '%')) OR " + "LOWER(p.productLocation) LIKE LOWER(CONCAT('%', :key, '%'))")
     List<Product> searchProducts(@Param("key") String key);
 
-    @Query("SELECT r.rating FROM Rating r WHERE r.user.id = :userId AND r.quiz.id = :quizId")
-    Long findUserRatingForProduct(@Param("userId") Long userId, @Param("quizId") Long quizId);
+    @Query("SELECT r.rating FROM Rating r WHERE r.user.id = :userId AND r.product.id = :productId")
+    Long findUserRatingForProduct(@Param("userId") Long userId, @Param("productId") Long productId);
 
 }

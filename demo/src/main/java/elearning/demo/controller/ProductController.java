@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping("/product")
 @CrossOrigin("*")
 @Api(value = "Product", tags = "Product")
 public class ProductController {

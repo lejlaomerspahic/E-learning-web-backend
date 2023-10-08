@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.course.CourseCreatedRequest;
 import elearning.demo.dto.course.RatingRequest;
@@ -17,6 +18,7 @@ import elearning.demo.repository.CourseRepository;
 import elearning.demo.repository.UserRepository;
 import elearning.demo.service.CourseService;
 
+@Service
 public class CourseServiceImpl implements CourseService {
 
     @Autowired

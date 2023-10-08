@@ -3,6 +3,7 @@ package elearning.demo.serviceImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.quiz.QuizCreatedRequest;
 import elearning.demo.mapper.QuizMapper;
@@ -10,6 +11,7 @@ import elearning.demo.models.Quiz;
 import elearning.demo.repository.QuizRepository;
 import elearning.demo.service.QuizService;
 
+@Service
 public class QuizServiceImpl implements QuizService {
 
     @Autowired

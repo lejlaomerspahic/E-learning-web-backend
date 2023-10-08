@@ -1,12 +1,6 @@
 package elearning.demo.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,11 +9,8 @@ import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.user.UserCreatedRequest;
 import elearning.demo.dto.user.UserLoginRequest;
-import elearning.demo.dto.user.UserUpadateProducts;
 import elearning.demo.dto.user.UserUpdateRequest;
 import elearning.demo.mapper.UserMapper;
-import elearning.demo.models.Items;
-import elearning.demo.models.Product;
 import elearning.demo.models.Products;
 import elearning.demo.models.User;
 import elearning.demo.repository.UserRepository;
@@ -97,54 +88,59 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public User updateUserProduct(Long userId, UserUpadateProducts updatedUserData) throws Exception {
-        boolean areAllNamesEqual = false;
-        String name = "";
-        for (int i = 1; i < updatedUserData.getPlaces().size(); i++) {
-            if (updatedUserData.getPlaces().get(i) != updatedUserData.getPlaces().get(0)) {
-                areAllNamesEqual = true;
-                name = updatedUserData.getPlaces().get(i);
-            }
-        }
-        Items item = new Items();
-        List<Items> items = new ArrayList();
-        List<Products> products = new ArrayList();
-        User existingUser = repository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " + userId + " nije pronađen."));
-
-        if (areAllNamesEqual) {
-            for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
-                Product product = new Product(updatedUserData.getProductIds().get(i));
-                item.setProductId(product);
-                item.setCount(updatedUserData.getCounts().get(i));
-            }
-
-            items.add(item);
-            Products product = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
-                    name);
-
-            products.add(product);
-            existingUser.setProducts(products);
-        } else {
-            for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
-                Product product = new Product(updatedUserData.getProductIds().get(i));
-                item.setProductId(product);
-                item.setCount(updatedUserData.getCounts().get(i));
-                items.add(item);
-
-                Products productt = new Products(items, updatedUserData.getDate(), updatedUserData.getStatus(), updatedUserData.getPrice(),
-                        name);
-
-                products.add(productt);
-                existingUser.setProducts(products);
-            }
-
-        }
-
-        return existingUser;
-
-    }
+    // @Override
+    // public User updateUserProduct(Long userId, UserUpadateProducts
+    // updatedUserData) throws Exception {
+    // boolean areAllNamesEqual = false;
+    // String name = "";
+    // for (int i = 1; i < updatedUserData.getPlaces().size(); i++) {
+    // if (updatedUserData.getPlaces().get(i) !=
+    // updatedUserData.getPlaces().get(0)) {
+    // areAllNamesEqual = true;
+    // name = updatedUserData.getPlaces().get(i);
+    // }
+    // }
+    // Items item = new Items();
+    // List<Items> items = new ArrayList();
+    // List<Products> products = new ArrayList();
+    // User existingUser = repository.findById(userId)
+    // .orElseThrow(() -> new EntityNotFoundException("Korisnik s ID-om " +
+    // userId + " nije pronađen."));
+    //
+    // if (areAllNamesEqual) {
+    // for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
+    // Product product = new Product(updatedUserData.getProductIds().get(i));
+    // item.setProductId(product);
+    // item.setCount(updatedUserData.getCounts().get(i));
+    // }
+    //
+    // items.add(item);
+    // Products product = new Products(items, updatedUserData.getDate(),
+    // updatedUserData.getStatus(), updatedUserData.getPrice(),
+    // name);
+    //
+    // products.add(product);
+    // existingUser.setProducts(products);
+    // } else {
+    // for (int i = 0; i < updatedUserData.getProductIds().size(); i++) {
+    // Product product = new Product(updatedUserData.getProductIds().get(i));
+    // item.setProductId(product);
+    // item.setCount(updatedUserData.getCounts().get(i));
+    // items.add(item);
+    //
+    // Products productt = new Products(items, updatedUserData.getDate(),
+    // updatedUserData.getStatus(), updatedUserData.getPrice(),
+    // name);
+    //
+    // products.add(productt);
+    // existingUser.setProducts(products);
+    // }
+    //
+    // }
+    //
+    // return existingUser;
+    //
+    // }
 
     @Override
     public String getStatus(Long userId, String itemId) {
@@ -167,31 +163,35 @@ public class UserServiceImpl implements UserService {
         return itemStatus;
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
-    public void updateStatus() {
-        List<User> users = repository.findAll();
-
-        for (User user : users) {
-            for (Products products : user.getProducts()) {
-                Date currentDate = new Date();
-                Date purchaseDate = products.getDate();
-                long twoDaysInMillis = 2 * 24 * 60 * 60 * 1000;
-                Date nextStatusUpdateDate = new Date(purchaseDate.getTime() + twoDaysInMillis);
-
-                String[] statusOptions = { "Narudžba primljena", "Narudžba poslata", "Narudžba u tranzitu", "Narudžba stigla na odredište",
-                        "Narudžba u procesu dostave", "Narudžba isporučena" };
-
-                if (currentDate.after(nextStatusUpdateDate)) {
-                    int currentStatusIndex = Arrays.asList(statusOptions).indexOf(products.getStatus());
-
-                    if (currentStatusIndex < statusOptions.length - 1) {
-                        String newStatus = statusOptions[currentStatusIndex + 1];
-                        products.setStatus(newStatus);
-                    }
-                }
-            }
-
-            repository.save(user);
-        }
-    }
+    // @Override
+    // @Scheduled(cron = "*/10 * * * * *")
+    // public void updateStatus() {
+    // List<User> users = repository.findAll();
+    //
+    // for (User user : users) {
+    // for (Products products : user.getProducts()) {
+    // Date currentDate = new Date();
+    // Date purchaseDate = products.getDate();
+    // long twoDaysInMillis = 60 * 1000;// 2 * 24 * 60 * 60 * 1000;
+    // Date nextStatusUpdateDate = new Date(purchaseDate.getTime() +
+    // twoDaysInMillis);
+    //
+    // String[] statusOptions = { "Narudžba primljena", "Narudžba poslata",
+    // "Narudžba u tranzitu", "Narudžba stigla na odredište",
+    // "Narudžba u procesu dostave", "Narudžba isporučena" };
+    //
+    // if (currentDate.after(nextStatusUpdateDate)) {
+    // int currentStatusIndex =
+    // Arrays.asList(statusOptions).indexOf(products.getStatus());
+    //
+    // if (currentStatusIndex < statusOptions.length - 1) {
+    // String newStatus = statusOptions[currentStatusIndex + 1];
+    // products.setStatus(newStatus);
+    // }
+    // }
+    // }
+    //
+    // repository.save(user);
+    // }
+    // }
 }

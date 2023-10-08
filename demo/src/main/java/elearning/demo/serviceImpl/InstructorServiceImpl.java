@@ -1,6 +1,7 @@
 package elearning.demo.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import elearning.demo.dto.instructor.InstructorCreatedRequest;
 import elearning.demo.mapper.InstructorMapper;
@@ -8,6 +9,7 @@ import elearning.demo.models.Instructor;
 import elearning.demo.repository.InstructorRepository;
 import elearning.demo.service.InstructorService;
 
+@Service
 public class InstructorServiceImpl implements InstructorService {
 
     @Autowired
