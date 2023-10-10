@@ -52,12 +52,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Role saveRole(Role saveRole) {
-        Role role = this._roleRepository.findByName(saveRole.getName());
-        if (role != null) {
-            throw new IllegalStateException("Role already exists");
+        Role existingRole = this._roleRepository.findByName(saveRole.getName());
+        if (existingRole != null) {
+            existingRole.setName(saveRole.getName());
+            return this._roleRepository.save(existingRole);
+        } else {
+            this._roleRepository.save(saveRole);
+            return saveRole;
         }
-        this._roleRepository.save(saveRole);
-        return saveRole;
     }
 
     @Override
@@ -87,23 +89,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public JwtResponse createToken(UserLoginReqDto user) throws Exception {
-        String username = user.getUsername();
+        String email = user.getEmail();
         String password = user.getPassword();
-        authenticate(username, password);
-        User User = this._userRepository.findByEmail(username);
-        if (user.getRememberMe().isPresent()) {
-            if (user.getRememberMe().get() == false) { // ako user nije stavio
-                                                       // rememberMe, nece se
-                                                       // token ni kreirati
-                return new JwtResponse(username, "", User.getRole().getName());
+        authenticate(email, password);
+        User User = this._userRepository.findByEmail(email);
+        JwtResponse response;
 
-            } else {
-                final UserDetails userDetails = loadUserByUsername(username);
+        if (user.getRememberMe().isPresent()) {
+            if (user.getRememberMe().get()) {
+                final UserDetails userDetails = loadUserByUsername(email);
                 String newGeneratedToken = this._jwtUtil.generateToken(userDetails);
-                return new JwtResponse(username, newGeneratedToken, User.getRole().getName());
+                response = new JwtResponse(email, newGeneratedToken, User.getRole().getName());
+            } else {
+                response = new JwtResponse(email, "", User.getRole().getName());
             }
+        } else {
+            response = new JwtResponse(email, "", User.getRole().getName());
         }
-        return new JwtResponse(username, "", User.getRole().getName());
+
+        return response;
     }
 
     private void authenticate(String username, String password) throws Exception {
