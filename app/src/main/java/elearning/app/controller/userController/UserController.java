@@ -28,11 +28,8 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin("*")
 public class UserController {
 
-    private final UserService _userService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -49,7 +46,7 @@ public class UserController {
     @GetMapping("/{id}")
     public User getSinge(@PathVariable Long id) throws Exception {
 
-        User user = this._userService.getUser(id);
+        User user = this.userService.getUser(id);
         if (user == null) {
             throw new Exception("User does not exist.");
         }
