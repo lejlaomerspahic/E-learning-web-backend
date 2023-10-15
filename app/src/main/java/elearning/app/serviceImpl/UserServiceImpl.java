@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,9 +33,13 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
+    @Autowired
     private final UserRepository _userRepository;
+    @Autowired
     private final RoleRepository _roleRepository;
+    @Autowired
     private final PasswordEncoder _passwordEncoder;
+    @Autowired
     private final JwtUtil _jwtUtil;
 
     @Override
