@@ -104,12 +104,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             if (user.getRememberMe().get()) {
                 final UserDetails userDetails = loadUserByUsername(email);
                 String newGeneratedToken = this._jwtUtil.generateToken(userDetails);
-                response = new JwtResponse(User.getId(), newGeneratedToken, User.getRole().getName());
+                response = new JwtResponse(User, newGeneratedToken);
             } else {
-                response = new JwtResponse(User.getId(), "", User.getRole().getName());
+                response = new JwtResponse(User, "");
             }
         } else {
-            response = new JwtResponse(User.getId(), "", User.getRole().getName());
+            response = new JwtResponse(User, "");
         }
 
         return response;

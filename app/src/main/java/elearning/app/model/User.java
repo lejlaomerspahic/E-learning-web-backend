@@ -30,6 +30,14 @@ public class User {
         this.email = email;
     }
 
+    public User(Long id, String username, String email, String location, Role role) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.location = location;
+        this.role = role;
+    }
+
     @Id
     @GeneratedValue(
 
