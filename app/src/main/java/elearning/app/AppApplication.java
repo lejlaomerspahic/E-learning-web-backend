@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import elearning.app.model.Role;
 import elearning.app.serviceImpl.UserServiceImpl;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "elearning.app")
 public class AppApplication {
 
     public static void main(String[] args) {

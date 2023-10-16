@@ -17,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+
     private final UserDetailsService _userDetailsService;
     private final JwtAuthenticationEntryPoint _jwtAuthenticationEntryPoint;
     private final JwtRequestFilter _jwtRequestFilter;

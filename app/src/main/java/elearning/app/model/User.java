@@ -39,9 +39,7 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(
-
-    )
+    @GeneratedValue()
     private Long id;
     @Column(name = "username")
     private String username;
