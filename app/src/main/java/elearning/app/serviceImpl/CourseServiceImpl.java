@@ -13,16 +13,19 @@ import elearning.app.repository.CourseRepository;
 import elearning.app.repository.UserRepository;
 import elearning.app.service.CourseService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    private CourseMapper courseMapper;
+    @Autowired
+    public CourseServiceImpl(CourseMapper courseMapper) {
+        this.courseMapper = courseMapper;
+    }
+
     @Autowired
     private UserRepository userRepository;
 
