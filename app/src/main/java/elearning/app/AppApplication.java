@@ -10,8 +10,7 @@ import elearning.app.model.Role;
 import elearning.app.serviceImpl.UserServiceImpl;
 
 @SpringBootApplication
-@ComponentScan({ "elearning.app.service", "elearning.app.serviceImpl" })
-@MapperScan("elearning.app.mapper")
+@ComponentScan("elearning.app.**")
 public class AppApplication {
 
     public static void main(String[] args) {

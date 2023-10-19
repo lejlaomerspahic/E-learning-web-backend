@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtUtil {
     private static final String SECRET_KEY = "notGoodIdeaLeavingThisSeenButWhatever";
-    private static final Integer TOKEN_VALIDITY = 3600 * 5;
+    private static final Integer TOKEN_VALIDITY = 1 * 60;
     private final UserRepository _userRepository;
 
     public String getUserNameFromToken(String token) {
@@ -28,7 +28,7 @@ public class JwtUtil {
 
     public Long getUserIdFromToken(String token) {
         Long userId = getClaimFromToken(token, claims -> {
-            return claims.get("userId", Long.class);
+            return claims.get("id", Long.class);
         });
         return userId;
     }

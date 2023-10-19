@@ -1,6 +1,6 @@
 package elearning.app.dto.course;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -17,4 +17,5 @@ public class CourseCreatedRequest {
     private String videoId;
     private Date lastUpdated;
     private String language;
+    private String icon;
 }

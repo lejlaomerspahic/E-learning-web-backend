@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,15 +20,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserDetailsService _userDetailsService;
-    private final JwtAuthenticationEntryPoint _jwtAuthenticationEntryPoint;
-    private final JwtRequestFilter _jwtRequestFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     public SecurityConfig(@Lazy UserDetailsService userDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
             JwtRequestFilter jwtRequestFilter) {
         this._userDetailsService = userDetailsService;
-        _jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        _jwtRequestFilter = jwtRequestFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Bean
@@ -47,7 +48,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors();
         http.csrf().disable();
-        http.authorizeHttpRequests((authz) -> authz.anyRequest().permitAll());
+        http.authorizeHttpRequests(
+                (authz) -> authz.requestMatchers("/user/signup", "/user/signin").permitAll().anyRequest().authenticated());
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 }

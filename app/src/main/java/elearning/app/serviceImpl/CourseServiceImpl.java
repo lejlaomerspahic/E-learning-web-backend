@@ -12,27 +12,36 @@ import elearning.app.model.Course;
 import elearning.app.repository.CourseRepository;
 import elearning.app.repository.UserRepository;
 import elearning.app.service.CourseService;
-import jakarta.transaction.Transactional;
 
 @Service
-@Transactional
 public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseRepository courseRepository;
-    private final CourseMapper courseMapper;
-
     @Autowired
-    public CourseServiceImpl(CourseMapper courseMapper) {
-        this.courseMapper = courseMapper;
-    }
-
+    private CourseMapper courseMapper;
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public String create(CourseCreatedRequest courseCreatedRequest) {
-        courseRepository.save(courseMapper.dtoToEntity(courseCreatedRequest));
-        return "Course created successfully";
+    public Course create(CourseCreatedRequest courseCreatedRequest) {
+        System.out.println("CourseCreatedRequest");
+        System.out.println(courseCreatedRequest);
+
+        Course course = new Course();
+        course.setName(courseCreatedRequest.getName());
+        course.setDescription(courseCreatedRequest.getDescription());
+        course.setCategory(courseCreatedRequest.getCategory());
+        course.setIcon(courseCreatedRequest.getIcon());
+        course.setDuration(courseCreatedRequest.getDuration());
+        course.setImageUrl(courseCreatedRequest.getImageUrl());
+        course.setIcon(courseCreatedRequest.getIcon());
+        course.setInfo(courseCreatedRequest.getInfo());
+        course.setLevel(courseCreatedRequest.getLevel());
+        course.setLanguage(courseCreatedRequest.getLanguage());
+        course.setLastUpdated(courseCreatedRequest.getLastUpdated());
+        course.setVideoId(courseCreatedRequest.getVideoId());
+        return courseRepository.save(course);
+
     }
 
     @Override

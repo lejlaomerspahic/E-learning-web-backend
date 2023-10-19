@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public JwtResponse createToken(UserLoginReqDto user) throws Exception {
         String email = user.getEmail();
         String password = user.getPassword();
+
         authenticate(email, password);
         User User = this._userRepository.findByEmail(email);
         JwtResponse response;
@@ -116,7 +117,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void authenticate(String username, String password) throws Exception {
-
         User authUser = this._userRepository.findByEmail(username);
         if (authUser == null) {
             throw new DisabledException("");

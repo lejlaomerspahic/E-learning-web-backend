@@ -8,7 +8,7 @@ import elearning.app.model.Course;
 
 public interface CourseService {
 
-    String create(CourseCreatedRequest courseCreatedRequest);
+    Course create(CourseCreatedRequest courseCreatedRequest);
 
     List<Course> search(String key);
 

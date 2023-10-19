@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,13 +31,21 @@ public class CourseController {
     private JwtUtil jwtService;
 
     @PostMapping("/create")
-    public String createCourse(@RequestBody CourseCreatedRequest courseCreatedRequest) throws Exception {
+    public Course createCourse(@RequestBody CourseCreatedRequest courseCreatedRequest) throws Exception {
         return courseService.create(courseCreatedRequest);
     }
 
     @GetMapping("/search/course/{key}")
-    public List<Course> searchCourse(@PathVariable String key) {
-        return courseService.search(key);
+    public List<Course> searchCourse(@PathVariable String key, @RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        Long userId = jwtService.getUserIdFromToken(token);
+        if (userId != null) {
+            return courseService.search(key);
+        }
+
+        System.out.println("user");
+        System.out.println(userId);
+        return null;
     }
 
     @GetMapping("/{id}")
