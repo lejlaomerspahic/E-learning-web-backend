@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtUtil {
     private static final String SECRET_KEY = "notGoodIdeaLeavingThisSeenButWhatever";
-    private static final Integer TOKEN_VALIDITY = 1 * 60;
+    private static final Integer TOKEN_VALIDITY = 5 * 3600;
     private final UserRepository _userRepository;
 
     public String getUserNameFromToken(String token) {
