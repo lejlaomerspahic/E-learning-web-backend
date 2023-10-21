@@ -22,9 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil _jwtUtil;
-
     @Autowired
-    private UserServiceImpl userService;
+    private UserServiceImpl _userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -41,11 +40,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException ex) {
                 System.out.println("Token has expired");
             }
-        } else if (header != null && !header.startsWith("Bearer ")) {
+        } else {
             System.out.println("Jwt token does not start with Bearer");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails user = this.userService.loadUserByUsername(username);
+            UserDetails user = this._userService.loadUserByUsername(username);
 
             if (_jwtUtil.validateToken(jwtToken, user)) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

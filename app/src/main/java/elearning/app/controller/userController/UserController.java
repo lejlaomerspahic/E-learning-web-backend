@@ -35,7 +35,6 @@ public class UserController {
 
     @PostMapping("/signin")
     public JwtResponse authenticateAndGetToken(@RequestBody UserLoginReqDto authRequest) throws Exception {
-
         return userService.createToken(authRequest);
     }
 
