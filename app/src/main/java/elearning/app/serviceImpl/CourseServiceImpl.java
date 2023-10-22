@@ -53,6 +53,12 @@ public class CourseServiceImpl implements CourseService {
     public Optional<Course> getCourse(Long id) {
         return courseRepository.findById(id);
     }
+
+    @Override
+    public List<Course> searchCourse(String key) {
+        return courseRepository.findCoursesBySearchString(key);
+    }
+
     //
     // @Override
     // public Double rating(Long courseId, RatingRequest ratingRequest, Long

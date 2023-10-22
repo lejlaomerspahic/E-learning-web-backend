@@ -14,6 +14,8 @@ public interface CourseService {
 
     Optional<Course> getCourse(Long id);
 
+    List<Course> searchCourse(String key);
+
     // Double rating(Long courseId, RatingRequest ratingRequest, Long userId);
 
 }
