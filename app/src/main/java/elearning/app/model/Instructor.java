@@ -26,6 +26,7 @@ public class Instructor {
     private String name;
     private String bio;
 
+    private String occupation;
     @ManyToOne
     private Contact contact;
 
