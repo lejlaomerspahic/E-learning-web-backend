@@ -2,17 +2,21 @@ package elearning.app.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Instructor {
 
     @Id
@@ -27,7 +31,6 @@ public class Instructor {
 
     private String imageUrl;
     @ManyToMany
-    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "instructors_id"),
-            inverseJoinColumns = @JoinColumn(name = "courses_id"))
+    @JsonIgnore
     private List<Course> course;
 }

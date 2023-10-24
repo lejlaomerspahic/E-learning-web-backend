@@ -13,13 +13,14 @@ import elearning.app.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class JwtUtil {
     private static final String SECRET_KEY = "notGoodIdeaLeavingThisSeenButWhatever";
     private static final Integer TOKEN_VALIDITY = 5 * 24 * 60 * 60;
+
     private final UserRepository _userRepository;
 
     public String getUserNameFromToken(String token) {

@@ -20,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/course")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class CourseController {
     @Autowired
     private CourseService courseService;

@@ -3,24 +3,19 @@ package elearning.app.serviceImpl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import elearning.app.dto.course.CourseCreatedRequest;
-import elearning.app.mapper.CourseMapper;
 import elearning.app.model.Course;
 import elearning.app.repository.CourseRepository;
-import elearning.app.repository.UserRepository;
 import elearning.app.service.CourseService;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class CourseServiceImpl implements CourseService {
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private CourseMapper courseMapper;
-    @Autowired
-    private UserRepository userRepository;
+
+    private final CourseRepository courseRepository;
 
     @Override
     public Course create(CourseCreatedRequest courseCreatedRequest) {

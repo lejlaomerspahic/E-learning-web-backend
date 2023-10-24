@@ -26,4 +26,5 @@ public interface UserService {
     JwtResponse createToken(UserLoginReqDto user) throws Exception;
 
     UserUpdateResDto updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception;
+
 }

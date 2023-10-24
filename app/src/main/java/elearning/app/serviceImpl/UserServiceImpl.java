@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,44 +32,41 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-    @Autowired
-    private final UserRepository _userRepository;
-    @Autowired
-    private final RoleRepository _roleRepository;
-    @Autowired
-    private final PasswordEncoder _passwordEncoder;
-    @Autowired
-    private final JwtUtil _jwtUtil;
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     public UserCreatedResDto saveUser(RegisterReqDto User) throws Exception {
-        User usr = this._userRepository.findByEmail(User.getEmail());
+        User usr = this.userRepository.findByEmail(User.getEmail());
         if (usr != null) {
             throw new Exception("User with email already exists.");
         }
         User user = new User(User.getUsername(), User.getEmail(), User.getPassword(), User.getLocation());
-        user.setPassword(this._passwordEncoder.encode(User.getPassword()));
-        var returnUser = this._userRepository.save(user);
+        user.setPassword(this.passwordEncoder.encode(User.getPassword()));
+        var returnUser = this.userRepository.save(user);
         this.addRoleToUser(User.getEmail(), "USER");
         return new UserCreatedResDto(returnUser.getId(), returnUser.getUsername(), returnUser.getEmail(), returnUser.getLocation());
     }
 
     @Override
     public Role saveRole(Role saveRole) {
-        Role existingRole = this._roleRepository.findByName(saveRole.getName());
+        Role existingRole = this.roleRepository.findByName(saveRole.getName());
         if (existingRole != null) {
             existingRole.setName(saveRole.getName());
-            return this._roleRepository.save(existingRole);
+            return this.roleRepository.save(existingRole);
         } else {
-            this._roleRepository.save(saveRole);
+            this.roleRepository.save(saveRole);
             return saveRole;
         }
     }
 
     @Override
     public void addRoleToUser(String email, String roleName) {
-        User user = this._userRepository.findByEmail(email);
-        Role role = this._roleRepository.findByName(roleName);
+        User user = this.userRepository.findByEmail(email);
+        Role role = this.roleRepository.findByName(roleName);
         if (user == null || role == null) {
             throw new IllegalStateException("User or role are not found.");
         }
@@ -79,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getUser(Long id) {
-        User user = this._userRepository.findById(id);
+        User user = this.userRepository.findById(id);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -88,7 +84,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<User> getUsers() {
-        List<User> users = this._userRepository.findAll();
+        List<User> users = this.userRepository.findAll();
         return users;
     }
 
@@ -98,13 +94,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String password = user.getPassword();
 
         authenticate(email, password);
-        User User = this._userRepository.findByEmail(email);
+        User User = this.userRepository.findByEmail(email);
         JwtResponse response;
 
         if (user.getRememberMe().isPresent()) {
             if (user.getRememberMe().get()) {
                 final UserDetails userDetails = loadUserByUsername(email);
-                String newGeneratedToken = this._jwtUtil.generateToken(userDetails);
+                String newGeneratedToken = this.jwtUtil.generateToken(userDetails);
                 response = new JwtResponse(User, newGeneratedToken);
             } else {
                 response = new JwtResponse(User, "");
@@ -117,11 +113,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     private void authenticate(String username, String password) throws Exception {
-        User authUser = this._userRepository.findByEmail(username);
+        User authUser = this.userRepository.findByEmail(username);
         if (authUser == null) {
             throw new DisabledException("");
         }
-        boolean passwordCorrect = this._passwordEncoder.matches(password, authUser.getPassword());
+        boolean passwordCorrect = this.passwordEncoder.matches(password, authUser.getPassword());
         if (!passwordCorrect) {
             throw new BadCredentialsException("Passwords do not match");
         }
@@ -130,7 +126,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = this._userRepository.findByEmail(email);
+        User user = this.userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found!");
         }
@@ -141,7 +137,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserUpdateResDto updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception {
-        User existingUser = _userRepository.findById(userId);
+        User existingUser = userRepository.findById(userId);
 
         if (existingUser == null) {
             throw new UsernameNotFoundException("User not found!");
@@ -151,7 +147,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         existingUser.setPassword(updatedUserData.getPassword());
         existingUser.setLocation(updatedUserData.getLocation());
 
-        User updatedUser = _userRepository.save(existingUser);
+        User updatedUser = userRepository.save(existingUser);
 
         return new UserUpdateResDto(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getLocation());
 

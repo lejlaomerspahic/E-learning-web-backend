@@ -1,6 +1,5 @@
 package elearning.app.controller.userController;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +24,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final UserService userService;
+
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/signin")
     public JwtResponse authenticateAndGetToken(@RequestBody UserLoginReqDto authRequest) throws Exception {

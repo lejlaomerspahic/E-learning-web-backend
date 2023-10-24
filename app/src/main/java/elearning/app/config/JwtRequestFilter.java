@@ -21,9 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
-    private JwtUtil _jwtUtil;
+    private JwtUtil jwtUtil;
     @Autowired
-    private UserServiceImpl _userService;
+    private UserServiceImpl userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,10 +31,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         final String header = request.getHeader("Authorization");
         String jwtToken = null;
         String username = null;
+        System.out.println("heder");
+        System.out.println(header);
         if (header != null && header.startsWith("Bearer ")) {
             jwtToken = header.substring(7);
             try {
-                username = this._jwtUtil.getUserNameFromToken(jwtToken);
+                username = this.jwtUtil.getUserNameFromToken(jwtToken);
             } catch (IllegalArgumentException ex) {
                 System.out.println("Token not available");
             } catch (ExpiredJwtException ex) {
@@ -44,9 +46,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             System.out.println("Jwt token does not start with Bearer");
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails user = this._userService.loadUserByUsername(username);
+            UserDetails user = this.userService.loadUserByUsername(username);
 
-            if (_jwtUtil.validateToken(jwtToken, user)) {
+            if (jwtUtil.validateToken(jwtToken, user)) {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(token);
