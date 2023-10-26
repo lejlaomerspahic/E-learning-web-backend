@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,8 +40,10 @@ public class Instructor {
     private List<String> subjects;
 
     private String bio;
-    // @ManyToOne
-    // private Contact contact;
+
+    private String background;
+    @ManyToOne
+    private Contact contact;
 
     private String imageUrl;
     @ManyToMany(mappedBy = "instructor", fetch = FetchType.EAGER)
