@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Table(name = "course")
 public class Course {
 
     @Id
@@ -35,13 +36,13 @@ public class Course {
     private Date lastUpdated;
     private String language;
     private String icon;
-    @ManyToMany
-    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "courses_id"),
-            inverseJoinColumns = @JoinColumn(name = "instructors_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_id", referencedColumnName = "id"))
     private List<Instructor> instructor;
 
-    @OneToMany(mappedBy = "course")
-    private List<Rating> ratings;
-    @ManyToOne
-    private Favorite favorite;
+    // @OneToMany(mappedBy = "course")
+    // private List<Rating> ratings;
+    // @ManyToOne
+    // private Favorite favorite;
 }

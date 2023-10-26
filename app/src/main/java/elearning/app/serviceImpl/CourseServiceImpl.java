@@ -9,19 +9,18 @@ import elearning.app.dto.course.CourseCreatedRequest;
 import elearning.app.model.Course;
 import elearning.app.repository.CourseRepository;
 import elearning.app.service.CourseService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
 
     @Override
     public Course create(CourseCreatedRequest courseCreatedRequest) {
-        System.out.println("CourseCreatedRequest");
-        System.out.println(courseCreatedRequest);
-
         Course course = new Course();
         course.setName(courseCreatedRequest.getName());
         course.setDescription(courseCreatedRequest.getDescription());
@@ -46,6 +45,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Optional<Course> getCourse(Long id) {
+        System.out.println("kurs");
+        System.out.println(id);
         return courseRepository.findById(id);
     }
 
