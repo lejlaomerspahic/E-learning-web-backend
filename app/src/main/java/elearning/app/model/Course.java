@@ -3,6 +3,9 @@ package elearning.app.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Table(name = "course")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Course {
 
     @Id
@@ -39,6 +44,7 @@ public class Course {
     private String language;
     private String icon;
     @ManyToMany(fetch = FetchType.EAGER)
+
     @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "instructor_id", referencedColumnName = "id"))
     private List<Instructor> instructor;

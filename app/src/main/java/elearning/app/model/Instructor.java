@@ -2,7 +2,8 @@ package elearning.app.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,6 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "instructor")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Instructor {
 
     @Id
@@ -47,7 +50,7 @@ public class Instructor {
 
     private String imageUrl;
     @ManyToMany(mappedBy = "instructor", fetch = FetchType.EAGER)
-    @JsonIgnore
+
     private List<Course> course;
 
 }
