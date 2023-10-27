@@ -43,6 +43,12 @@ public class CourseController {
 
     }
 
+    @GetMapping("/get")
+    public List<Course> searchCourseAll() {
+        return courseService.get();
+
+    }
+
     @GetMapping("/{id}")
     public Optional<Course> getCourse(@PathVariable Long id) {
         return courseService.getCourse(id);

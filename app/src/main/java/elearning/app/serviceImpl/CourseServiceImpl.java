@@ -45,8 +45,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Optional<Course> getCourse(Long id) {
-        System.out.println("kurs");
-        System.out.println(id);
         return courseRepository.findById(id);
     }
 
@@ -55,6 +53,10 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.findCoursesBySearchString(key);
     }
 
+    @Override
+    public List<Course> get() {
+        return courseRepository.findAll();
+    }
     //
     // @Override
     // public Double rating(Long courseId, RatingRequest ratingRequest, Long

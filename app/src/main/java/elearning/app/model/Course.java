@@ -44,9 +44,8 @@ public class Course {
     private String language;
     private String icon;
     @ManyToMany(fetch = FetchType.EAGER)
-
-    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "instructor_id", referencedColumnName = "id"))
+    @JoinTable(name = "instructor_course", joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_id"))
     private List<Instructor> instructor;
 
     @OneToMany(mappedBy = "course")

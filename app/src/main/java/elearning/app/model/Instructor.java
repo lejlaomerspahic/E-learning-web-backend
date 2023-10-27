@@ -3,6 +3,7 @@ package elearning.app.model;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
@@ -49,8 +50,9 @@ public class Instructor {
     private Contact contact;
 
     private String imageUrl;
-    @ManyToMany(mappedBy = "instructor", fetch = FetchType.EAGER)
 
+    @ManyToMany(mappedBy = "instructor", fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Course> course;
 
 }

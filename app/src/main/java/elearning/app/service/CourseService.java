@@ -16,6 +16,8 @@ public interface CourseService {
 
     List<Course> searchCourse(String key);
 
+    List<Course> get();
+
     // Double rating(Long courseId, RatingRequest ratingRequest, Long userId);
 
 }
