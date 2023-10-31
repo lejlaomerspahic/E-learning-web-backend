@@ -1,7 +1,5 @@
 package elearning.app.dto.favorite;
 
-import java.util.List;
-
 import elearning.app.model.Course;
 import elearning.app.model.Product;
 import elearning.app.model.User;
@@ -12,7 +10,7 @@ public class FavoriteCreateRequest {
 
     private User user;
 
-    private List<Course> course;
+    private Course course;
 
-    private List<Product> product;
+    private Product product;
 }

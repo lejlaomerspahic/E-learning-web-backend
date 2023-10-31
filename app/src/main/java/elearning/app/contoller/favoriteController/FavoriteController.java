@@ -11,7 +11,7 @@ import elearning.app.model.Favorite;
 import elearning.app.service.FavoriteService;
 
 @RestController
-@RequestMapping("/favorites")
+@RequestMapping("/favorite")
 public class FavoriteController {
 
     @Autowired
@@ -19,6 +19,6 @@ public class FavoriteController {
 
     @PostMapping("/create")
     public Favorite createFavorite(@RequestBody FavoriteCreateRequest favorite) {
-        return favoriteService.create(favorite);
+        return favoriteService.createFavorite(favorite);
     }
 }

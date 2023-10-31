@@ -17,13 +17,20 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
     @Override
-    public Favorite create(FavoriteCreateRequest favorite) {
-        Favorite favorites = new Favorite();
-        favorites.setProduct(favorite.getProduct());
-        favorites.setUser(favorite.getUser());
-        favorites.setCourse(favorite.getCourse());
-        return favoriteRepository.save(favorites);
+    public Favorite createFavorite(FavoriteCreateRequest request) {
+        Favorite favorite = new Favorite();
+        favorite.setUser(request.getUser());
 
+        if (request.getCourse() != null) {
+            favorite.setCourse(request.getCourse());
+        }
+
+        if (request.getProduct() != null) {
+            favorite.setProduct(request.getProduct());
+
+        }
+
+        return favoriteRepository.save(favorite);
     }
 
 }

@@ -5,6 +5,6 @@ import elearning.app.model.Favorite;
 
 public interface FavoriteService {
 
-    Favorite create(FavoriteCreateRequest favorite);
+    Favorite createFavorite(FavoriteCreateRequest request);
 
 }
