@@ -2,6 +2,8 @@ package elearning.app.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,7 +22,8 @@ public class Questions {
     @GeneratedValue()
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "quiz")
+    @JsonIgnore
+    @JoinColumn(name = "quiz_id")
     private Quiz quiz;
     private String questionText;
     private List<String> options;
