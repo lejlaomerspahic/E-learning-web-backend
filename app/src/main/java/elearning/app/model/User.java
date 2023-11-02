@@ -1,13 +1,15 @@
 package elearning.app.model;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +43,6 @@ public class User {
     @Id
     @GeneratedValue()
     private Long id;
-    @Column(name = "username")
     private String username;
     private String email;
     @JsonIgnore
@@ -52,5 +53,8 @@ public class User {
     @JsonIgnore
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Favorite> favorite;
 
 }

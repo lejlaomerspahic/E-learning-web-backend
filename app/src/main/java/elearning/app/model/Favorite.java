@@ -1,5 +1,7 @@
 package elearning.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -19,11 +21,14 @@ public class Favorite {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     private Course course;
 
     @ManyToOne
+    @JsonIgnore
     private Product product;
 }
