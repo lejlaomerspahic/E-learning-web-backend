@@ -10,4 +10,6 @@ public interface RatingService {
     public Rating create(RatingCreatedRequest request);
 
     public ResponseEntity<?> getRatingCourse(Long param1, Long param2);
+
+    ResponseEntity<?> getRatingProduct(Long param1, Long param2);
 }

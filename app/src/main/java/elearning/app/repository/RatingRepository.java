@@ -11,7 +11,8 @@ import elearning.app.model.Rating;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
-    @Query("SELECT r FROM Rating r WHERE r.user.id = :userId AND r.course.id = :courseId")
-    Optional<Rating> findRatingByUserAndCourse(@Param("userId") Long userId, @Param("courseId") Long courseId);
+    @Query("SELECT r FROM Rating r WHERE (r.user.id = :userId AND r.course.id = :courseId) OR (r.user.id = :userId AND r.product.id = :productId)")
+    Optional<Rating> findRatingByUserAndCourseOrProduct(@Param("userId") Long userId, @Param("courseId") Long courseId,
+            @Param("productId") Long productId);
 
 }

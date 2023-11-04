@@ -34,4 +34,9 @@ public class RatingController {
     public ResponseEntity<?> getCourseRatings(@RequestParam("param1") Long param1, @RequestParam("param2") Long param2) throws Exception {
         return ratingService.getRatingCourse(param1, param2);
     }
+
+    @GetMapping("/productRatings")
+    public ResponseEntity<?> getProductRatings(@RequestParam("param1") Long param1, @RequestParam("param2") Long param2) throws Exception {
+        return ratingService.getRatingProduct(param1, param2);
+    }
 }

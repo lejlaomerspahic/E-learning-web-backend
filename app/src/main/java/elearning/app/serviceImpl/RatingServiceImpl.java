@@ -37,7 +37,8 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating create(RatingCreatedRequest request) {
-        Optional<Rating> existingRating = ratingRepository.findRatingByUserAndCourse(request.getUser(), request.getCourse());
+        Optional<Rating> existingRating = ratingRepository.findRatingByUserAndCourseOrProduct(request.getUser(), request.getCourse(),
+                request.getProduct());
 
         if (existingRating.isPresent()) {
             Rating rating = existingRating.get();
@@ -89,6 +90,43 @@ public class RatingServiceImpl implements RatingService {
 
             Map<String, Object> response = new HashMap<>();
             response.put("course", course);
+            response.put("userRating", userRating);
+            response.put("averageRating", averageRating);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get course details");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getRatingProduct(Long param1, Long param2) {
+        try {
+
+            Product product = productRepository.findByIdAndRatingsUserId(param1, param2);
+            if (product == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+            }
+
+            List<Rating> ratings = product.getRatings();
+            Rating userRating = null;
+            for (Rating rating : ratings) {
+                if (rating.getUser().getId() == param2) {
+                    userRating = rating;
+                    break;
+                }
+            }
+
+            int totalRatings = ratings.size();
+            int totalRatingSum = 0;
+            for (Rating rating : ratings) {
+                totalRatingSum += rating.getRating();
+            }
+            double averageRating = totalRatings > 0 ? (double) totalRatingSum / totalRatings : 0;
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("product", product);
             response.put("userRating", userRating);
             response.put("averageRating", averageRating);
 
