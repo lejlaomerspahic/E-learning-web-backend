@@ -19,4 +19,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             + "c.category LIKE %:searchString% OR " + "c.level LIKE %:searchString% OR " + "c.language LIKE %:searchString%")
     List<Course> findCoursesBySearchString(@Param("searchString") String searchString);
 
+    @Query("SELECT c FROM Course c " + "JOIN c.ratings r " + "WHERE c.id = :courseId AND r.user.id = :userId")
+    Course findByIdAndRatingsUserId(Long courseId, Long userId);
 }

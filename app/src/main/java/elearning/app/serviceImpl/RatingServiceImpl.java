@@ -1,7 +1,12 @@
 package elearning.app.serviceImpl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import elearning.app.dto.rating.RatingCreatedRequest;
@@ -54,6 +59,43 @@ public class RatingServiceImpl implements RatingService {
             }
             newRating.setRating(request.getRating());
             return ratingRepository.save(newRating);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getRatingCourse(Long param1, Long param2) {
+        try {
+
+            Course course = courseRepository.findByIdAndRatingsUserId(param1, param2);
+            if (course == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            }
+
+            List<Rating> ratings = course.getRatings();
+            Rating userRating = null;
+            for (Rating rating : ratings) {
+                if (rating.getUser().getId() == param2) {
+                    userRating = rating;
+                    break;
+                }
+            }
+
+            int totalRatings = ratings.size();
+            int totalRatingSum = 0;
+            for (Rating rating : ratings) {
+                totalRatingSum += rating.getRating();
+            }
+            double averageRating = totalRatings > 0 ? (double) totalRatingSum / totalRatings : 0;
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("course", course);
+            response.put("userRating", userRating);
+            response.put("averageRating", averageRating);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get course details");
         }
     }
 
