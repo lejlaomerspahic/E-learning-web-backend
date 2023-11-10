@@ -8,4 +8,5 @@ public class UserUpdateReqDto {
     private String email;
     private String password;
     private String location;
+    private String url;
 }

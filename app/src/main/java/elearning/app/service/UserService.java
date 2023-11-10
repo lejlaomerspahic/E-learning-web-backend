@@ -7,7 +7,6 @@ import elearning.app.dto.user.RegisterReqDto;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
-import elearning.app.dto.user.UserUpdateResDto;
 import elearning.app.model.Role;
 import elearning.app.model.User;
 
@@ -25,6 +24,6 @@ public interface UserService {
 
     JwtResponse createToken(UserLoginReqDto user) throws Exception;
 
-    UserUpdateResDto updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception;
+    JwtResponse updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception;
 
 }

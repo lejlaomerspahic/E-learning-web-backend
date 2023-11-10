@@ -10,4 +10,5 @@ public class UserUpdateResDto {
     private String username;
     private String email;
     private String location;
+    private JwtResponse response;
 }

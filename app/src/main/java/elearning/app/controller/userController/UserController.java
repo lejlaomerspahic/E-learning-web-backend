@@ -2,9 +2,9 @@ package elearning.app.controller.userController;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,6 @@ import elearning.app.dto.user.RegisterReqDto;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
-import elearning.app.dto.user.UserUpdateResDto;
 import elearning.app.model.User;
 import elearning.app.service.UserService;
 import elearning.app.util.JwtUtil;
@@ -54,12 +53,12 @@ public class UserController {
 
     }
 
-    @PutMapping("/update")
-    public UserUpdateResDto updateUser(@RequestBody UserUpdateReqDto updatedUserData,
-            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+    @PatchMapping("/update")
+    public JwtResponse updateUser(@RequestBody UserUpdateReqDto updatedUserData, @RequestHeader("Authorization") String authorizationHeader)
+            throws Exception {
         String token = authorizationHeader.substring(7);
         Long userId = jwtUtil.getUserIdFromToken(token);
-        UserUpdateResDto updatedUser = userService.updateUser(userId, updatedUserData);
+        JwtResponse updatedUser = userService.updateUser(userId, updatedUserData);
         return updatedUser;
     }
 

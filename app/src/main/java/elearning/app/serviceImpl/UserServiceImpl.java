@@ -18,7 +18,6 @@ import elearning.app.dto.user.RegisterReqDto;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
-import elearning.app.dto.user.UserUpdateResDto;
 import elearning.app.model.Role;
 import elearning.app.model.User;
 import elearning.app.repository.RoleRepository;
@@ -136,20 +135,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserUpdateResDto updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception {
+    public JwtResponse updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception {
         User existingUser = userRepository.findById(userId);
 
         if (existingUser == null) {
             throw new UsernameNotFoundException("User not found!");
         }
-        existingUser.setUsername(updatedUserData.getUsername());
-        existingUser.setEmail(updatedUserData.getEmail());
-        existingUser.setPassword(updatedUserData.getPassword());
-        existingUser.setLocation(updatedUserData.getLocation());
+        if (updatedUserData.getUsername() != null) {
+            existingUser.setUsername(updatedUserData.getUsername());
+        }
+        if (updatedUserData.getEmail() != null) {
+            existingUser.setEmail(updatedUserData.getEmail());
+        }
+        if (updatedUserData.getPassword() != null) {
+            existingUser.setPassword(updatedUserData.getPassword());
+        }
+        if (updatedUserData.getLocation() != null) {
+            existingUser.setLocation(updatedUserData.getLocation());
+        }
+        if (updatedUserData.getUrl() != null) {
+            existingUser.setPicture(updatedUserData.getUrl());
+        }
 
         User updatedUser = userRepository.save(existingUser);
 
-        return new UserUpdateResDto(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getLocation());
+        final UserDetails userDetails = loadUserByUsername(updatedUser.getEmail());
+        String newGeneratedToken = this.jwtUtil.generateToken(userDetails);
+        JwtResponse response = new JwtResponse(updatedUser, newGeneratedToken);
+
+        return response;
 
     }
 }
