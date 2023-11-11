@@ -75,6 +75,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUser(Long id) {
         User user = this.userRepository.findById(id);
+
+        System.out.println("user");
+        System.out.println(user);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }

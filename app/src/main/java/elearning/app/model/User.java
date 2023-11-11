@@ -48,6 +48,7 @@ public class User {
     @JsonIgnore
     private String password;
     private String location;
+
     private String picture;
     @ManyToOne
     @JsonIgnore
