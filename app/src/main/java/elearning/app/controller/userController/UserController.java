@@ -62,6 +62,15 @@ public class UserController {
         return updatedUser;
     }
 
+    @PostMapping("/user-quiz/{courseId}")
+    public User createQuizInUser(@PathVariable(value = "courseId") Long courseId,
+            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+        String token = authorizationHeader.substring(7);
+        Long userId = jwtUtil.getUserIdFromToken(token);
+
+        return userService.createUserQuiz(userId, courseId);
+    }
+
     // @PutMapping("/update/products")
     // public User updateUserProducts(@RequestBody UserUpadateProducts
     // updatedUserData,

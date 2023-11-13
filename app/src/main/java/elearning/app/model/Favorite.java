@@ -31,4 +31,10 @@ public class Favorite {
     @ManyToOne
     @JsonIgnore
     private Product product;
+
+    @Override
+    public String toString() {
+        return "Favorite{" + "id=" + id + ", course=" + course + ", product=" + product + '}';
+    }
+
 }

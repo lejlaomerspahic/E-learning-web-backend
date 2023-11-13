@@ -57,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> get() {
         return courseRepository.findAll();
     }
+
     //
     // @Override
     // public Double rating(Long courseId, RatingRequest ratingRequest, Long

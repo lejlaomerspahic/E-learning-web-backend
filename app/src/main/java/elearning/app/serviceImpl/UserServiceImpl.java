@@ -18,8 +18,10 @@ import elearning.app.dto.user.RegisterReqDto;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
+import elearning.app.model.Quiz;
 import elearning.app.model.Role;
 import elearning.app.model.User;
+import elearning.app.repository.QuizRepository;
 import elearning.app.repository.RoleRepository;
 import elearning.app.repository.UserRepository;
 import elearning.app.service.UserService;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final QuizRepository quizRepository;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -76,8 +79,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User getUser(Long id) {
         User user = this.userRepository.findById(id);
 
-        System.out.println("user");
-        System.out.println(user);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -168,5 +169,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return response;
 
+    }
+
+    @Override
+    public User createUserQuiz(Long userId, Long quizId) {
+        User existingUser = userRepository.findById(userId);
+
+        List<Quiz> existingQuizzes = existingUser.getQuiz();
+        Quiz quiz = quizRepository.getById(quizId);
+
+        existingQuizzes.add(quiz);
+
+        existingUser.setQuiz(existingQuizzes);
+        userRepository.save(existingUser);
+
+        return existingUser;
     }
 }

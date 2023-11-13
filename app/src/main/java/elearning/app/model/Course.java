@@ -52,4 +52,5 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private List<Favorite> favorite;
+
 }

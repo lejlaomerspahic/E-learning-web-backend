@@ -26,4 +26,6 @@ public interface UserService {
 
     JwtResponse updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception;
 
+    User createUserQuiz(Long userId, Long id);
+
 }
