@@ -1,12 +1,17 @@
 package elearning.app.service;
 
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 
 import elearning.app.dto.user.JwtResponse;
 import elearning.app.dto.user.RegisterReqDto;
+import elearning.app.dto.user.ResultRequest;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
+import elearning.app.model.QuizResult;
 import elearning.app.model.Role;
 import elearning.app.model.User;
 
@@ -26,6 +31,10 @@ public interface UserService {
 
     JwtResponse updateUser(Long userId, UserUpdateReqDto updatedUserData) throws Exception;
 
-    User createUserQuiz(Long userId, Long id);
+    QuizResult createUserQuiz(Long userId, ResultRequest resultRequest);
+
+    List<QuizResult> getCourseResult(Long userId);
+
+    ResponseEntity<List<Map<String, Object>>> getQuizzesByUserId(Long userId);
 
 }

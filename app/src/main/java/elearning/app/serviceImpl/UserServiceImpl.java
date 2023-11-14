@@ -2,8 +2,12 @@ package elearning.app.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,17 +19,21 @@ import org.springframework.stereotype.Service;
 
 import elearning.app.dto.user.JwtResponse;
 import elearning.app.dto.user.RegisterReqDto;
+import elearning.app.dto.user.ResultRequest;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
 import elearning.app.model.Quiz;
+import elearning.app.model.QuizResult;
 import elearning.app.model.Role;
 import elearning.app.model.User;
 import elearning.app.repository.QuizRepository;
+import elearning.app.repository.QuizResultRepository;
 import elearning.app.repository.RoleRepository;
 import elearning.app.repository.UserRepository;
 import elearning.app.service.UserService;
 import elearning.app.util.JwtUtil;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +44,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final QuizResultRepository quizResultRepository;
     private final PasswordEncoder passwordEncoder;
     private final QuizRepository quizRepository;
     private final JwtUtil jwtUtil;
@@ -172,17 +181,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User createUserQuiz(Long userId, Long quizId) {
+    public QuizResult createUserQuiz(Long userId, ResultRequest resultRequest) {
         User existingUser = userRepository.findById(userId);
+        Quiz quiz = quizRepository.getById(resultRequest.getQuizId());
 
-        List<Quiz> existingQuizzes = existingUser.getQuiz();
-        Quiz quiz = quizRepository.getById(quizId);
+        if (existingUser != null && quiz != null) {
+            QuizResult quizResult = new QuizResult();
+            quizResult.setQuiz(quiz);
+            quizResult.setUser(existingUser);
+            quizResult.setUserScore(resultRequest.getScore());
 
-        existingQuizzes.add(quiz);
+            quizResultRepository.save(quizResult);
 
-        existingUser.setQuiz(existingQuizzes);
-        userRepository.save(existingUser);
-
-        return existingUser;
+            return quizResult;
+        } else {
+            throw new EntityNotFoundException("User or Quiz not found");
+        }
     }
+
+    @Override
+    public List<QuizResult> getCourseResult(Long userId) {
+        return quizResultRepository.findByUserId(userId);
+    }
+
+    @Override
+    public ResponseEntity<List<Map<String, Object>>> getQuizzesByUserId(Long userId) {
+        List<QuizResult> quizResults = quizResultRepository.findByUserId(userId);
+
+        List<Map<String, Object>> quizDataList = quizResults.stream().map(this::mapQuizData).collect(Collectors.toList());
+
+        return ResponseEntity.ok(quizDataList);
+    }
+
+    private Map<String, Object> mapQuizData(QuizResult quizResult) {
+        Map<String, Object> quizData = new HashMap<>();
+        quizData.put("quiz", quizResult.getQuiz());
+        quizData.put("userScore", quizResult.getUserScore());
+        return quizData;
+    }
+
 }

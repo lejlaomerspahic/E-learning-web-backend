@@ -1,5 +1,9 @@
 package elearning.app.controller.userController;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import elearning.app.dto.user.JwtResponse;
 import elearning.app.dto.user.RegisterReqDto;
+import elearning.app.dto.user.ResultRequest;
 import elearning.app.dto.user.UserCreatedResDto;
 import elearning.app.dto.user.UserLoginReqDto;
 import elearning.app.dto.user.UserUpdateReqDto;
+import elearning.app.model.QuizResult;
 import elearning.app.model.User;
 import elearning.app.service.UserService;
 import elearning.app.util.JwtUtil;
@@ -62,13 +68,18 @@ public class UserController {
         return updatedUser;
     }
 
-    @PostMapping("/user-quiz/{courseId}")
-    public User createQuizInUser(@PathVariable(value = "courseId") Long courseId,
-            @RequestHeader("Authorization") String authorizationHeader) throws Exception {
+    @PostMapping("/user-quiz")
+    public QuizResult createQuizInUser(@RequestBody ResultRequest resultRequest, @RequestHeader("Authorization") String authorizationHeader)
+            throws Exception {
         String token = authorizationHeader.substring(7);
         Long userId = jwtUtil.getUserIdFromToken(token);
 
-        return userService.createUserQuiz(userId, courseId);
+        return userService.createUserQuiz(userId, resultRequest);
+    }
+
+    @GetMapping("/result/{id}")
+    ResponseEntity<List<Map<String, Object>>> getCourseResult(@PathVariable Long id) {
+        return userService.getQuizzesByUserId(id);
     }
 
     // @PutMapping("/update/products")
