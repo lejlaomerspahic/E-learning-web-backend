@@ -59,6 +59,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Favorite> favorite;
 
+    @OneToMany(mappedBy = "user")
+    private List<Transactions> transactions;
+
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", username='" + username + '\'' + ", email='" + email + '\'' + '}';
