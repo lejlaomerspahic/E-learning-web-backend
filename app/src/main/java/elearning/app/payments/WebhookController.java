@@ -2,6 +2,7 @@ package elearning.app.payments;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +39,14 @@ public class WebhookController {
     @ResponseStatus(HttpStatus.OK)
     public void handleWebhookEvent(@RequestBody String payload) {
         ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println("payload");
-        System.out.println(payload);
+        System.out.print(payload);
         try {
             JsonNode jsonNode = objectMapper.readTree(payload);
             String eventType = jsonNode.path("type").asText();
 
             if ("checkout.session.completed".equals(eventType)) {
                 String transactionId = jsonNode.path("data").path("object").path("id").asText();
-                Double amount = jsonNode.path("data").path("object").path("amount").asDouble();
+                Double amount = jsonNode.path("data").path("object").path("amount_total").asDouble();
                 String currency = jsonNode.path("data").path("object").path("currency").asText();
                 Long userId = jsonNode.path("data").path("object").path("metadata").path("userId").asLong();
 
@@ -56,6 +56,7 @@ public class WebhookController {
                 transaction.setAmount(amount);
                 transaction.setCurrency(currency);
                 transaction.setUser(user);
+                transaction.setCreationDate(new Date());
 
                 String productIdsString = jsonNode.path("data").path("object").path("metadata").path("productIds").asText();
                 String countsString = jsonNode.path("data").path("object").path("metadata").path("counts").asText();
@@ -64,22 +65,18 @@ public class WebhookController {
                 });
                 List<Integer> counts = objectMapper.readValue(countsString, new TypeReference<List<Integer>>() {
                 });
-
-                System.out.println("Product IDs: " + productIds);
-                System.out.println("Counts: " + counts);
-
                 List<ProductInfo> productInfoList = new ArrayList<>();
 
                 for (int i = 0; i < productIds.size(); i++) {
                     ProductInfo productInfo = new ProductInfo();
-                    productInfo.setProduct_id(productIds.get(i));
+                    productInfo.setProductId(productIds.get(i));
                     productInfo.setCount(counts.get(i));
                     productInfoList.add(productInfo);
                 }
 
                 productInfoRepository.saveAll(productInfoList);
 
-                transaction.setProduct(productInfoList);
+                transaction.setProductInfo(productInfoList);
 
                 transactionsRepository.save(transaction);
             }

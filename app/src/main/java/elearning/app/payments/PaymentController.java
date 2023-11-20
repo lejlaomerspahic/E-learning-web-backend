@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +22,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 
 import elearning.app.model.Product;
 import elearning.app.model.ProductInfo;
+import elearning.app.model.Transactions;
 import elearning.app.repository.ProductRepository;
 import elearning.app.repository.TransactionsRepository;
 import elearning.app.util.JwtUtil;
@@ -64,7 +67,7 @@ public class PaymentController {
                 .map(productInfo -> createSessionLineItem(productInfo, paymentRequest.getCurrency())).collect(Collectors.toList());
 
         Map<String, Object> metadata = new HashMap<>();
-        metadata.put("productIds", products.stream().map(productInfo -> productInfo.getProduct_id()).collect(Collectors.toList()));
+        metadata.put("productIds", products.stream().map(productInfo -> productInfo.getProductId()).collect(Collectors.toList()));
         metadata.put("counts", products.stream().map(ProductInfo::getCount).collect(Collectors.toList()));
         metadata.put("userId", userId);
 
@@ -80,15 +83,26 @@ public class PaymentController {
     }
 
     private SessionCreateParams.LineItem createSessionLineItem(ProductInfo productInfo, String currency) {
-        Product product = productRepository.getById(productInfo.getProduct_id());
-        String priceString = product.getPrice();
-        priceString = priceString.replaceAll("[^\\d.]", "");
-        double price = Double.parseDouble(priceString);
-        return SessionCreateParams.LineItem.builder()
-                .setPriceData(SessionCreateParams.LineItem.PriceData.builder().setCurrency(currency)
-                        .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder().setName(product.getTitle()).build())
-                        .setUnitAmount((long) (price * 100)).build())
-                .setQuantity((long) productInfo.getCount()).build();
+
+        if (productInfo.getProductId() != null) {
+            Product product = productRepository.getById(productInfo.getProductId());
+            String priceString = product.getPrice();
+            priceString = priceString.replaceAll("[^\\d.]", "");
+            double price = Double.parseDouble(priceString);
+            return SessionCreateParams.LineItem.builder()
+                    .setPriceData(SessionCreateParams.LineItem.PriceData.builder().setCurrency(currency)
+                            .setProductData(
+                                    SessionCreateParams.LineItem.PriceData.ProductData.builder().setName(product.getTitle()).build())
+                            .setUnitAmount((long) (price * 100)).build())
+                    .setQuantity((long) productInfo.getCount()).build();
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping("/get-transaction/{id}")
+    public List<Transactions> getTransaction(@PathVariable Long id) {
+        return transactionsRepository.findByUserId(id);
     }
 
 }

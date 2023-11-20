@@ -17,10 +17,10 @@ public class ProductInfo {
     @Id
     @GeneratedValue()
     private Long id;
-    private Long product_id;
+    private Long productId;
     private Integer count;
 
-    @ManyToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "productInfo", fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Transactions> transactions;
 }
